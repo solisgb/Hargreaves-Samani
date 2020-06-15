@@ -1,10 +1,3 @@
-with est (
-select distinct t.c_clima 
-from met.cl_temper_diaria t
-where t.fh_medida > '1985-01-01' and t.fh_medida < '2015-01-01'
-order by t.c_clima 
-)
-
 select e.c_clima , round(st_y(st_transform(e.geom, 4326))::numeric, 0) latitud, t.fh_medida , t.tmax , t.tmin , (t.tmax + t.tmin)*0.5 tavg 
 from met.cl_est_climat e
 	left join met.cl_temper_diaria t using (c_clima)
@@ -28,4 +21,6 @@ create table met.r0 (
 	primary key (lat)
 	);
 
-select r01 from met.r0 order by lat;
+update r0 set r0=0.0 where r0<0;
+
+select * from r0 order by lat, "month";
